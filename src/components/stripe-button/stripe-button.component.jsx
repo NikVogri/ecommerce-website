@@ -1,13 +1,25 @@
 import React from 'react';
 import StripeCheckout from 'react-stripe-checkout';
+import axios from 'axios';
 
 const StripeCheckoutButton = ({ price }) => {
   const priceForStripe = price * 100;
-  const publishableKey = 'pk_test_WBqax2FWVzS9QlpJScO07iuL';
+  const publishableKey = 'pk_test_hDgqC4udeuWKTTOuvq0etf7400OZ9XRwTY';
 
   const onToken = token => {
-    console.log(token);
-    alert('Payment Succesful!');
+    axios({
+      url: 'https://cors-anywhere.herokuapp.com/localhost:4000/payment',
+      method: 'post',
+      data: {
+        amount: priceForStripe,
+        token
+      }
+    }).then(res => {
+      alert('Payment successful')
+    }).catch(err => {
+      console.log('Payment error:', err);
+      alert('There was an issue with your payment. Make sure you use the provided credit card.');
+    });
   };
 
   return (
