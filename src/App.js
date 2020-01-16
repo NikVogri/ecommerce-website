@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { GlobalStyle } from './global.styles';
-
+import ErrorBoundary from './components/error/error-boundry.component';
 import Header from './components/header/header.component';
 import Spinner from './components/spinner/spinner.component';
 import { selectCurrentUser } from './redux/user/user.selectors';
@@ -33,13 +33,15 @@ class App extends React.Component {
         <GlobalStyle />
         <Header />
         <Switch>
-          <Suspense fallback={<Spinner />}>
-            <Route exact path='/' component={HomePage} />
-            <Route path='/shop' component={ShopPage} />
-            <Route exact path='/checkout' component={CheckoutPage} />
-            <Route exact path='/signin' render={() => this.props.currentUser ? (<Redirect to='/' />) : (<SignInAndSignUpPage />)}
-            />
-          </Suspense>
+          <ErrorBoundary>
+            <Suspense fallback={<Spinner />}>
+              <Route exact path='/' component={HomePage} />
+              <Route path='/shop' component={ShopPage} />
+              <Route exact path='/checkout' component={CheckoutPage} />
+              <Route exact path='/signin' render={() => this.props.currentUser ? (<Redirect to='/' />) : (<SignInAndSignUpPage />)}
+              />
+            </Suspense>
+          </ErrorBoundary>
         </Switch>
       </div>
     );
